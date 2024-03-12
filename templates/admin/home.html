@@ -1,0 +1,19 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+
+<div class="min-h-screen flex flex-col items-center justify-center gap-4">
+
+   <div class="card bg-neutral">
+      <div class="card-body w-96">
+         <span class="w-full flex justify-center">
+            <h1 class="card-title neutral-content">
+               Administrator Dashboard
+            </h1>
+         </span>
+         <a href="users" class="btn btn-accent">View Users</a>
+         <a href="signout" class="btn btn-error">Sign Out</a>
+      </div>
+   </div>
+</div>
+
+{% endblock %}
