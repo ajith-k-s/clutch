@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Adder</title>
+</head>
+<body>
+   <form action="" method="POST">
+      {% csrf_token %}
+      <input name="name" placeholder="name">
+      <input type="email" name="email" placeholder="email">
+      <input type="number" name="mobile" placeholder="mobile">
+      <input type="date" name="dob" placeholder="dob">
+      <input name="username" placeholder="username">
+      <input name="password" placeholder="password">
+      <input type="submit">
+   </form>
+   <h1>{{ msg }}</h1>
+</body>
+</html>
