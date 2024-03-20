@@ -159,6 +159,9 @@ def users(request, username):
 
 # 'img': request.session['img']
 
+def theme(request):
+   return render(request, 'settings/themeselector.html')
+
 def test(request):
    if request.method == 'POST':
       return render(request, 'test.html', {'val': make_password(request.POST['txt'])})

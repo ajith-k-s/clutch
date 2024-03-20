@@ -48,6 +48,7 @@ urlpatterns = [
 
    path('test', views.test, name='test'),
    path('adder', views.adder, name='adder'),
+   path('theme', views.theme, name='theme'),
 ]
 
 urlpatterns = urlpatterns+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
