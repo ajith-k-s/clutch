@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Daisy UI Template</title>
+	<title>Sign up to Clutch</title>
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daisyui@4.6.2/dist/full.min.css" />
 	<script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -19,54 +19,59 @@
 					<h2 class="card-title neutral-content">Sign Up</h2>
 				</span>
 
-					<form action="signup" method="POST">
-						{% csrf_token %}
-						{% if errmsg %}
-						<div role="alert" class="alert alert-error">
-							<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
-								viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-									d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-							</svg>
-							<span>Invalid Username or Password</span>
-						</div>
-						{% endif %}
+				<form action="signup" method="POST">
+					{% csrf_token %}
+					{% if errmsg %}
+					<div role="alert" class="alert alert-error">
+						<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
+							viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+								d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+						</svg>
+						<span>Invalid Username or Password</span>
+					</div>
+					{% endif %}
 
-						<div class="form-control mt-2">
-							<label class="input input-bordered flex items-center gap-2">
-								<input type="text" name="name" class="grow bg-transparent" placeholder="Name" />
-							</label>
-						</div>
-						<div class="form-control mt-2">
-							<label class="input input-bordered flex items-center gap-2">
-								<input type="text" name="email" class="grow bg-transparent" placeholder="Email" />
-							</label>
-						</div>
-						<div class="form-control mt-2">
-							<label class="input input-bordered flex items-center gap-2">
-								<input type="text" name="mobile" class="grow bg-transparent" placeholder="Mobile" />
-							</label>
-						</div>
-						<div class="form-control mt-2">
-							<label class="input input-bordered flex items-center gap-2">
-								<input type="date" name="dob" class="grow bg-transparent" placeholder="Date of birth" />
-							</label>
-						</div>
-						<div class="form-control mt-2">
-							<label class="input input-bordered flex items-center gap-2">
-								<input type="text" name="username" class="grow bg-transparent" placeholder="Username" />
-							</label>
-						</div>
-						<div class="form-control mt-2 lg:w-80">
-							<label class="input input-bordered flex items-center gap-2">
-								
-								<input type="password" name="password" class="grow bg-transparent" placeholder="Password" />
-							</label>
-						</div>
-						<div class="form-control mt-2">
-							<button class="btn btn-primary">SIGN UP</button>
-						</div>
-					</form>
+					<div class="form-control mt-2">
+						<label class="input input-bordered flex items-center gap-2">
+							<input type="text" name="name" class="grow bg-transparent" placeholder="Name" />
+						</label>
+					</div>
+					<div class="form-control mt-2">
+						<label class="input input-bordered flex items-center gap-2">
+							<input type="text" name="email" class="grow bg-transparent" placeholder="Email" />
+						</label>
+					</div>
+					<div class="form-control mt-2">
+						<label class="input input-bordered flex items-center gap-2">
+							<input type="text" name="mobile" class="grow bg-transparent" placeholder="Mobile" />
+						</label>
+					</div>
+					<div class="form-control mt-2">
+						<label class="input input-bordered flex items-center gap-2">
+							<input type="date" name="dob" class="grow bg-transparent" placeholder="Date of birth" />
+						</label>
+					</div>
+					<div class="mt-2">
+						<label class="form-control">
+							<input id="username" type="text" name="username" class="input input-bordered bg-base-100"
+								placeholder="Username" />
+							<div>
+								<span id="checkUsr" class="label-text-alt text-error" style="display: none;">Username already
+									exists</span>
+							</div>
+						</label>
+					</div>
+					<div class="form-control mt-2 lg:w-80">
+						<label class="input input-bordered flex items-center gap-2">
+
+							<input type="password" name="password" class="grow bg-transparent" placeholder="Password" />
+						</label>
+					</div>
+					<div class="form-control mt-2">
+						<button class="btn btn-primary">SIGN UP</button>
+					</div>
+				</form>
 
 			</div>
 		</div>
@@ -74,13 +79,43 @@
 		<div class="card bg-neutral">
 			<div class="card-body w-96">
 				<div class="m-1 text-center">
-				Already have an account?
-				<a href="signin" class="link-primary">Sign in</a>
+					Already have an account?
+					<a href="signin" class="link-primary">Sign in</a>
 				</div>
 			</div>
 		</div>
-		
+
 	</div>
+
+
+	<script>
+		const inputField = document.getElementById('username');
+		const checkUsrSpan = document.getElementById('checkUsr');
+
+		function checkUsername() {
+			const enteredUsername = inputField.value.trim(); // Trim to remove leading/trailing whitespace
+
+			// Fetch data from Django backend to check if username exists
+			fetch(`/check-username-exists/?username=${enteredUsername}`)
+				.then(response => response.json())
+				.then(data => {
+					const usernameExists = data.exists;
+
+					// If username exists, display the span
+					if (usernameExists) {
+						checkUsrSpan.style.display = 'inline'; // Display the span
+					} else {
+						checkUsrSpan.style.display = 'none'; // Hide the span
+					}
+				})
+				.catch(error => {
+					console.error('Error checking username:', error);
+				});
+		}
+
+		// Add event listener for the blur event on the input field
+		inputField.addEventListener('blur', checkUsername);
+	</script>
 
 </body>
 
