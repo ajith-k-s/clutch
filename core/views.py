@@ -40,6 +40,9 @@ def page_not_found(request, exception=None):
 ###########################
 
 
+
+###########################
+###    JSON Response    ###
 # check whether username is available of not
 def checkUsr(request):
    if request.method == 'GET':
@@ -51,17 +54,17 @@ def checkUsr(request):
          return JsonResponse({'error': 'Profilename parameter missing'}, status=400)
    else:
       return JsonResponse({'error': 'Only GET method is allowed'}, status=405)
+###    JSON Response    ###
+###########################
 
 
 
-############################################################
-############################################################
-
-
+###########################
+###         Base        ###
 @require_login
 def index(request):
    if request.session['username'] =='admin':
-      return render(request,'admin/home.html', {'profile_image': request.session['profile_image']})
+      return render(request,'admin/home.html', {'sess': request.session})
    else:
       return redirect(feed)
 
@@ -108,13 +111,13 @@ def signup(request):
 def signout(request):
    logout(request)
    return redirect('signin')
+###         Base        ###
+###########################
 
 
 
-#########################    
-###     Admin page    ###
-#########################
-
+###########################    
+###      Admin page     ###
 @require_login
 @require_admin
 def userlist(request):
@@ -133,13 +136,13 @@ def blockusr(request, username):
    login = Profile.objects.get(username=username)
    login.delete()
    return redirect(users)
+###      Admin page     ###
+###########################
 
 
 
-#########################    
-###     User page     ###
-#########################
-
+###########################    
+###      User page      ###
 @require_login
 def feed(request):
    return render(request, 'user/feed.html', {'sess': request.session})
@@ -152,16 +155,22 @@ def users(request, username):
    else:
       isusr = False
    return render(request, 'user/profile.html', {'pro': pro, 'isusr': isusr, 'sess': request.session})
+###      User page      ###
+###########################
 
 
 
-
-
-# 'img': request.session['img']
-
+###########################
+###       Settings      ###
 def theme(request):
    return render(request, 'settings/themeselector.html')
+###       Settings      ###
+###########################
 
+
+
+###########################
+###         Test        ###
 def test(request):
    if request.method == 'POST':
       return render(request, 'test.html', {'val': make_password(request.POST['txt'])})
