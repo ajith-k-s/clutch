@@ -26,26 +26,52 @@ handler404 = "core.views.page_not_found"
 
 urlpatterns = [
    re_path(r'^favicon\.ico$', favicon_view),
+
+
+
+   ###########################
+   ###         Base        ###
    path("", views.index, name="index"),
    path("signin", views.signin, name="signin"),
    path("signup", views.signup, name="signup"),
    path("checkUsr", views.checkUsr, name="checkUsr"),
    path("signout", views.signout, name="signout"),
+   ###         Base        ###
+   ###########################
 
-   ###################################################################
 
+
+   ###########################    
+   ###      User page      ###
    path("feed", views.feed, name="feed"),
    path("users/<str:username>", views.users, name="users"),
    path("users/", views.users, name="users"),
+   ###      User page      ###
+   ###########################
 
-   ###################################################################
 
+
+   ###########################
+   ###       Settings      ###
+   path("settings/", views.settings, name="settings"),
+   path("account/", views.account, name="account"),
+   ###       Settings      ###
+   ###########################
+
+
+
+   ###########################    
+   ###      Admin page     ###
    path("userlist/", views.userlist, name="userlist"),
    path("editusr/<str:id>", views.editusr, name="editusr"),
    path("blockusr/<int:id>", views.blockusr, name="blockusr"),
+   ###      Admin page     ###
+   ###########################
 
-   ###################################################################
 
+
+   ###########################
+   ###         Test        ###
    path('test', views.test, name='test'),
    path('adder', views.adder, name='adder'),
    path('theme', views.theme, name='theme'),
