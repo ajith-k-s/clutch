@@ -160,15 +160,15 @@ def account(request):
          except:
             err = '1'
          usr = Profile.objects.get(id = request.session['uid'])
-         return render(request, 'account.html', {'usr': usr, 'err': err})
+         return render(request, 'account.html', {'usr': usr, 'err': err, 'sess': request.session})
       elif request.POST['action'] == 'cancel':
-         return render(request, 'settings/account.html', {'usr': usr})
+         return render(request, 'settings/account.html', {'usr': usr, 'sess': request.session})
    else:
-      return render(request, 'settings/account.html', {'usr': usr})
+      return render(request, 'settings/account.html', {'usr': usr, 'sess': request.session})
 
 @require_login
 def theme(request):
-   return render(request, 'settings/themeselector.html')
+   return render(request, 'settings/themeselector.html', {'sess': request.session})
 ###       Settings      ###
 ###########################
 

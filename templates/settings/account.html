@@ -4,21 +4,21 @@
 
 <div class="max-w-[100vw] flex flex-col items-center p-5">
    <div class="w-4/5 flex justify-center">
-      <div class="card">
+      <div class="card w-full">
          <div class="card-body bg-neutral">
 
             <h2 class="card-title">Profile Settings</h2>
 
-            <div class="flex lg:flex-row-reverse md:flex-col justify-between w-full gap-4">
+            <div class="flex lg:flex-row-reverse md:flex-col justify-between w-full h-fit gap-4">
                <div class="w-1/4 h-fit avatar">
                   <div class="w-full h-fit rounded-full relative group">
-                     <img class="" src="{{ usr.image.url }}">
+                     <img class="w-full h-fit" src="{{ usr.image.url }}">
                      <div class="absolute w-full h-1/4 left-0 bottom-0 right-0 opacity-0 group-hover:opacity-100">
                         <a class="w-full h-full btn btn-primary rounded-b-full text-primary-content">Change</a>
                      </div>
                   </div>
                </div>
-               <form action="account" method="POST" class="w-2/3 flex flex-col items-center mt-4">
+               <form action="/settings/account" method="POST" class="w-2/3 flex flex-col items-center mt-4">
                   {% csrf_token %}
                   <div class="w-full flex items-center mb-4 mx-2">
                      <label class="w-1/6">Name</label>

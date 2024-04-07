@@ -54,7 +54,7 @@ urlpatterns = [
    ###########################
    ###       Settings      ###
    path("settings/", views.settings, name="settings"),
-   path("account/", views.account, name="account"),
+   path("settings/account/", views.account, name="account"),
    ###       Settings      ###
    ###########################
 
