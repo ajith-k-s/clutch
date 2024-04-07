@@ -44,8 +44,8 @@ urlpatterns = [
    ###########################    
    ###      User page      ###
    path("feed", views.feed, name="feed"),
-   path("users/<str:username>", views.users, name="users"),
-   path("users/", views.users, name="users"),
+   path("user/<str:username>", views.user, name="user"),
+   path("user/", views.reuser, name="reuser"),
    ###      User page      ###
    ###########################
 

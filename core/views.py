@@ -122,13 +122,16 @@ def feed(request):
    return render(request, 'user/feed.html', {'sess': request.session})
 
 @require_login
-def users(request, username):
+def reuser(request):
+   return redirect(user, username=request.session['username'])
+@require_login
+def user(request, username):
    pro = Profile.objects.get(username=username)
    if username == request.session['username']:
       isusr = True
    else:
       isusr = False
-   return render(request, 'user/profile.html', {'pro': pro, 'isusr': isusr, 'sess': request.session})
+   return render(request, 'user/profile.html', {'pro': pro, 'res': 2, 'isusr': isusr, 'sess': request.session})
 ###      User page      ###
 ###########################
 
@@ -193,7 +196,7 @@ def editusr(request, id):
 def blockusr(request, username):
    login = Profile.objects.get(username=username)
    login.delete()
-   return redirect(users)
+   return redirect(userlist)
 ###      Admin page     ###
 ###########################
 
