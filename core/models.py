@@ -1,4 +1,11 @@
 from django.db import models
+import os
+import uuid
+
+def generate_filename(instance, filename):
+   ext = filename.split('.')[-1]
+   random_name = uuid.uuid4().hex
+   return os.path.join('posts/', random_name + '.' + ext)
 
 class Profile(models.Model):
    name = models.CharField(max_length = 30)
@@ -52,7 +59,7 @@ class Message(models.Model):
 class Post(models.Model):
    userid = models.IntegerField(default = 0, blank = False)
    description = models.TextField()
-   file = models.FileField(upload_to="posts/")
+   file = models.FileField(upload_to=generate_filename)
    created = models.DateTimeField(auto_now_add=True)
    class Meta:
       db_table = "post"

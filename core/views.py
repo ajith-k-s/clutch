@@ -124,6 +124,7 @@ def feed(request):
 @require_login
 def reuser(request):
    return redirect(user, username=request.session['username'])
+
 @require_login
 def user(request, username):
    pro = Profile.objects.get(username=username)
@@ -212,19 +213,32 @@ def test(request):
 
 def adder(request):
    if request.method == "POST":
-      usr = Profile.objects.create(
-         name = request.POST['name'],
-         email = request.POST['email'],
-         mobile = request.POST['mobile'],
-         dob = request.POST['dob'],
-         username = request.POST['username'],
-         password = make_password(request.POST['password'])
-      )
-      try:
-         usr.save()
-         msg = "Success"
-      except:
-         msg="Failed"
-      return render(request, 'adder.html', {'msg': msg})
+      if "user" in request.POST:
+         usr = Profile.objects.create(
+            name = request.POST['name'],
+            email = request.POST['email'],
+            mobile = request.POST['mobile'],
+            dob = request.POST['dob'],
+            username = request.POST['username'],
+            password = make_password(request.POST['password'])
+         )
+         try:
+            usr.save()
+            msg = "Success"
+         except:
+            msg="Failed"
+         return render(request, 'adder.html', {'loc': 1, 'msg': msg})
+      if "post" in request.POST:
+         pst = Post.objects.create(
+            userid = request.POST['uid'],
+            description = request.POST['desc'],
+            file = request.FILES['filee']
+         )
+         try:
+            pst.save()
+            msg = "Success"
+         except:
+            msg="Failed"
+         return render(request, 'adder.html', {'loc': 2, 'msg': msg})
    else:
       return render(request, 'adder.html')

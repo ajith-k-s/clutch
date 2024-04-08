@@ -1,21 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Adder</title>
 </head>
+
 <body>
-   <form action="" method="POST">
-      {% csrf_token %}
-      <input name="name" placeholder="name">
-      <input type="email" name="email" placeholder="email">
-      <input type="number" name="mobile" placeholder="mobile">
-      <input type="date" name="dob" placeholder="dob">
-      <input name="username" placeholder="username">
-      <input name="password" placeholder="password">
-      <input type="submit">
-   </form>
-   <h1>{{ msg }}</h1>
+   <table cellspacing="10" cellpadding="10">
+      <tr>
+         <td>
+            <form action="" method="POST">
+               {% csrf_token %}
+               <fieldset style="width:fit-content">
+                  <legend>User</legend>
+                  <input name="name" placeholder="name">
+                  <br>
+                  <input type="email" name="email" placeholder="email">
+                  <br>
+                  <input type="number" name="mobile" placeholder="mobile">
+                  <br>
+                  <input type="date" name="dob" placeholder="dob">
+                  <br>
+                  <input name="username" placeholder="username">
+                  <br>
+                  <input name="password" placeholder="password">
+                  <br>
+                  <input type="submit" name="user">
+               </fieldset>
+            </form>
+         </td>
+         <td>
+            <h1>{% if loc == 1 %} {{ msg }} {% endif %}</h1>
+         </td>
+      </tr>
+
+      <tr>
+         <td>
+            <form action="" method="POST" enctype="multipart/form-data">
+               {% csrf_token %}
+               <fieldset style="width:fit-content">
+                  <legend>Post</legend>
+                  <input name="uid" placeholder="uid">
+                  <br>
+                  <textarea name="desc" rows="3" cols="20" placeholder="desc"></textarea>
+                  <br>
+                  <input type="file" name="filee">
+                  <br>
+                  <input type="submit" name="post">
+               </fieldset>
+            </form>
+         </td>
+         <td>
+            <h1>{% if loc == 2 %} {{ msg }} {% endif %}</h1>
+         </td>
+      </tr>
+   </table>
+   <img src="{{ pst.file.url }}">
 </body>
+
 </html>
