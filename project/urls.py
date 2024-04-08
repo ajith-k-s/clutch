@@ -31,11 +31,11 @@ urlpatterns = [
 
    ###########################
    ###         Base        ###
-   path("", views.index, name="index"),
-   path("signin", views.signin, name="signin"),
-   path("signup", views.signup, name="signup"),
-   path("checkUsr", views.checkUsr, name="checkUsr"),
-   path("signout", views.signout, name="signout"),
+   path("/", views.index, name="index"),
+   path("signin/", views.signin, name="signin"),
+   path("signup/", views.signup, name="signup"),
+   path("checkUsr/", views.checkUsr, name="checkUsr"),
+   path("signout/", views.signout, name="signout"),
    ###         Base        ###
    ###########################
 
@@ -43,8 +43,8 @@ urlpatterns = [
 
    ###########################    
    ###      User page      ###
-   path("feed", views.feed, name="feed"),
-   path("user/<str:username>", views.user, name="user"),
+   path("feed/", views.feed, name="feed"),
+   path("user/<str:username>/", views.user, name="user"),
    path("user/", views.reuser, name="reuser"),
    ###      User page      ###
    ###########################
@@ -63,8 +63,8 @@ urlpatterns = [
    ###########################    
    ###      Admin page     ###
    path("userlist/", views.userlist, name="userlist"),
-   path("editusr/<str:id>", views.editusr, name="editusr"),
-   path("blockusr/<int:id>", views.blockusr, name="blockusr"),
+   path("editusr/<str:id>/", views.editusr, name="editusr"),
+   path("blockusr/<int:id>/", views.blockusr, name="blockusr"),
    ###      Admin page     ###
    ###########################
 
@@ -72,9 +72,9 @@ urlpatterns = [
 
    ###########################
    ###         Test        ###
-   path('test', views.test, name='test'),
-   path('adder', views.adder, name='adder'),
-   path('theme', views.theme, name='theme'),
+   path('test/', views.test, name='test'),
+   path('adder/', views.adder, name='adder'),
+   path('theme/', views.theme, name='theme'),
 ]
 
 urlpatterns = urlpatterns+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
