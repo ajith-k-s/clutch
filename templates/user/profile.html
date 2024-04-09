@@ -18,13 +18,13 @@
                <span>Posts</span>
             </div>
             <div class="h-20 w-1/4 card bg-base-200 rounded-box">
-               <a href="followers/" class="h-full w-full flex flex-col items-center justify-center">
+               <a href="/followers/" class="h-full w-full flex flex-col items-center justify-center">
                   <span class="text-2xl font-bold">{{ pro.followers }}</span>
                   <span>Followers</span>
                </a>
             </div>
             <div class="h-20 w-1/4 card bg-base-200 rounded-box">
-               <a href="followings/" class="h-full w-full flex flex-col items-center justify-center">
+               <a href="/followings/" class="h-full w-full flex flex-col items-center justify-center">
                   <span class="text-2xl font-bold">{{ pro.followings }}</span>
                   <span>Following</span>
                </a>
@@ -33,7 +33,7 @@
          <div>
             {% if isusr == True %}
             <div class="w-full flex items-center justify-center my-3">
-               <a href="/settings/account" class="w-5/6 btn btn-sm btn-wide btn-primary">Edit Profile</a>
+               <a href="/settings/account/" class="w-5/6 btn btn-sm btn-wide btn-primary">Edit Profile</a>
             </div>
             {% endif %}
          </div>
