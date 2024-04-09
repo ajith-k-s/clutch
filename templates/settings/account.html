@@ -4,12 +4,12 @@
 
 <div class="max-w-[100vw] flex flex-col items-center p-5">
    <div class="w-4/5 flex justify-center">
-      <div class="card w-full">
+      <div class="card card-compact w-full">
          <div class="card-body bg-neutral">
 
             <h2 class="card-title">Profile Settings</h2>
 
-            <div class="flex lg:flex-row-reverse md:flex-col justify-between w-full h-fit gap-4">
+            <div class="flex lg:flex-row-reverse flex-col lg:justify-evenly items-center w-full h-fit">
                <div class="w-1/4 h-fit avatar">
                   <div class="w-full h-fit rounded-full relative group">
                      <img class="w-full h-fit" src="{{ usr.image.url }}">
@@ -20,6 +20,19 @@
                </div>
                <form action="/settings/account" method="POST" class="w-2/3 flex flex-col items-center mt-4">
                   {% csrf_token %}
+                  <div class="w-full mb-4 mx-2">
+                     <label class="form-control">
+                        <div class="w-full flex flex-row items-center"> 
+                        <span class="w-1/6">Username</span>
+                        <input id="username" type="text" name="username" class="w-4/5 input input-bordered bg-base-100"
+                           placeholder="Username" />
+                        </div>
+                           <div>
+                           <span id="checkUsr" class="label-text-alt text-error">Username already
+                              exists</span>
+                        </div>
+                     </label>
+                  </div>
                   <div class="w-full flex items-center mb-4 mx-2">
                      <label class="w-1/6">Name</label>
                      <input type="text" class="w-4/5 input input-bordered" value="{{ usr.name }}" />
@@ -36,16 +49,6 @@
                         <button class="btn btn-sm" name="action" value='cancel'>Cancel</button>
                      </div>
                   </div>
-                  <div class="flex items-center mt-2 mb-4 mx-2">
-                     <label class="form-control">
-                        <input id="username" type="text" name="username" class="input input-bordered bg-base-100"
-                           placeholder="Username" />
-                        <div>
-                           <span id="checkUsr" class="label-text-alt text-error" style="display: none;">Username already
-                              exists</span>
-                        </div>
-                     </label>
-                  </div>
                </form>
             </div>
 
@@ -54,4 +57,4 @@
    </div>
 </div>
 
-   {% endblock %}
+{% endblock %}
