@@ -47,8 +47,11 @@ def checkUsr(request):        # check whether username is available of not
    if request.method == 'GET':
       username = request.GET.get('username', None)
       if username:
-         rec = Profile.objects.filter(username=username).count()
-         return JsonResponse({'exists': rec > 0})
+         if 'username' in request.session and username == request.session['username']:
+            return JsonResponse({'exists': False})
+         else:
+            rec = Profile.objects.filter(username=username).count()
+            return JsonResponse({'exists': rec > 0})
       else:
          return JsonResponse({'error': 'Profilename parameter missing'}, status=400)
    else:
@@ -155,8 +158,6 @@ def account(request):
             usr.name = request.POST['name']
          if request.POST['bio'] != usr.bio:
             usr.bio = request.POST['bio']
-         if check_password(request.POST['cpass'], usr.password):
-            usr.password = make_password(request.POST['npaswd'])
          try:
             usr.save()
             request.session['username'] = usr.username
@@ -164,7 +165,7 @@ def account(request):
          except:
             err = '1'
          usr = Profile.objects.get(id = request.session['uid'])
-         return render(request, 'account.html', {'usr': usr, 'err': err, 'sess': request.session})
+         return render(request, 'settings/account.html', {'usr': usr, 'err': err, 'sess': request.session})
       elif request.POST['action'] == 'cancel':
          return render(request, 'settings/account.html', {'usr': usr, 'sess': request.session})
    else:

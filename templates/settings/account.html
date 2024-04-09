@@ -18,35 +18,33 @@
                      </div>
                   </div>
                </div>
-               <form action="/settings/account" method="POST" class="w-2/3 flex flex-col items-center mt-4">
+               <form action="/settings/account/" method="POST" class="w-2/3 flex flex-col items-center mt-4">
                   {% csrf_token %}
                   <div class="w-full mb-4 mx-2">
-                     <label class="form-control">
-                        <div class="w-full flex flex-row items-center"> 
-                        <span class="w-1/6">Username</span>
-                        <input id="username" type="text" name="username" class="w-4/5 input input-bordered bg-base-100"
-                           placeholder="Username" />
-                        </div>
-                           <div>
-                           <span id="checkUsr" class="label-text-alt text-error">Username already
-                              exists</span>
+                     <label for="username" class="form-control flex flex-row w-full">
+                        <span class="label w-1/6">Username</span>
+                        <input id="username" name="username" class="w-4/5 input input-bordered"
+                           value="{{ usr.username }}" />
+                        <div id="errmsg" class="label hidden">
+                           <span class="label-text"></span>
+                           <span class="label-text text-error">Username already exists</span>
                         </div>
                      </label>
                   </div>
                   <div class="w-full flex items-center mb-4 mx-2">
-                     <label class="w-1/6">Name</label>
-                     <input type="text" class="w-4/5 input input-bordered" value="{{ usr.name }}" />
+                     <label for="name" class="w-1/6">Name</label>
+                     <input id="name" name="name" type="text" class="w-4/5 input input-bordered" value="{{ usr.name }}" />
                   </div>
                   <div class="w-full flex items-center mb-4 mx-2">
-                     <label class="w-1/6">Bio</label>
-                     <textarea class="w-4/5 textarea textarea-bordered resize">{{ usr.bio }}</textarea>
+                     <label for="bio" class="w-1/6">Bio</label>
+                     <textarea id="bio" name="bio" class="w-4/5 textarea textarea-bordered resize">{{ usr.bio }}</textarea>
                   </div>
                   <div class="w-full flex flex-row justify-center gap-3">
                      <div>
-                        <button class="btn btn-primary btn-sm" name="action" value='save'>Save</button>
+                        <button id="savebtn" class="btn btn-primary btn-sm" name="action" value='save'>Save</button>
                      </div>
                      <div>
-                        <button class="btn btn-sm" name="action" value='cancel'>Cancel</button>
+                        <button type="button" class="btn btn-sm" onclick="clearBox()">Clear</button>
                      </div>
                   </div>
                </form>
@@ -57,4 +55,35 @@
    </div>
 </div>
 
+<script>
+   function clearBox(){
+      document.getElementById('username').value = '{{ usr.username }}';
+      document.getElementById('name').value = '{{ usr.name }}';
+      document.getElementById('bio').value = '{{ usr.bio }}';
+   }
+
+   const usrInput = document.getElementById('username');
+   const errMsg = document.getElementById('errmsg');
+   const saveBtn = document.getElementById('savebtn')
+   usrInput.addEventListener('input', function () {
+      const username = this.value;
+
+      fetch(`/check-usr/?username=${username}`)
+         .then(response => response.json())
+         .then(data => {
+            if (data.exists) {
+               usrInput.classList.add('input-error');
+               errMsg.classList.remove('hidden');
+               saveBtn.classList.add('btn-disabled');
+            } else {
+               usrInput.classList.remove('input-error');
+               errMsg.classList.add('hidden');
+               saveBtn.classList.remove('btn-disabled');
+            }
+         })
+         .catch(error => {
+            console.error('Error:', error);
+         });
+   });
+</script>
 {% endblock %}
