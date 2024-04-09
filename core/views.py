@@ -1,12 +1,12 @@
 from django.contrib.auth.hashers import make_password, check_password
-from django.http import HttpResponseForbidden
+# from django.http import HttpResponseForbidden
 from django.http import JsonResponse
 from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 from .models import *
-from .DB import DbConnection
 
-dbobj=DbConnection(host="localhost",user="root",passwd="",database="clutch",port=3306)
+# from .DB import DbConnection
+# dbobj=DbConnection(host="localhost",user="root",passwd="",database="clutch",port=3306)
 
 
 
