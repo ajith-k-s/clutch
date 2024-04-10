@@ -18,3 +18,10 @@ def user(request, username):
    else:
       isusr = False
    return render(request, 'user/profile.html', {'pro': pro, 'res': 2, 'isusr': isusr, 'sess': request.session})
+
+@require_login
+def addPost(request):
+   if request.method == 'POST':
+      pass
+   else:
+      return render(request, 'user/addpost.html', {'sess': request.session})

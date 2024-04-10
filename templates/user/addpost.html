@@ -1,0 +1,132 @@
+{% extends "user/base.html" %}
+{% block content %}
+
+<div class="min-h-screen min-w-11/12 max-w-full flex flex-col justify-center m-5 gap-5 lg:flex-row">
+   <div class="w-1/3 h-fit card card-compact bg-neutral">
+      <div class="card-body">
+         <h2 class="card-title">Add Post</h2>
+         <form action="/addpost/" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-control">
+               <textarea id="desc" name="desc" class="textarea textarea-bordered w-full"
+                  placeholder="Write something"></textarea>
+            </div>
+            <div class="form-control flex flex-row mt-2 gap-2">
+               <label class="label ms-2">Add an image or a video</label>
+               <input id="file-input" name="filee" type="file" class="file-input file-input-bordered w-full" />
+               <div id="err-msg" role="alert" class="alert alert-error hidden"></div>
+            </div>
+         </form>
+      </div>
+   </div>
+   <div id="preview-card" class="w-1/3 h-fit card card-compact bg-neutral hidden">
+      <div class="card-body">
+         <h2 class="card-title">Preview</h2>
+         <div class="w-full h-fit card card-compact bg-base-100">
+            <div class="card-body">
+               <h2 class="card-title">@{{ sess.username }}</h2>
+               <p id="pst-txt" class="mx-3"></p>
+               <div id="preview-container" class=""></div>
+               <div class="w-full flex flex-row justify-stretch join">
+                  <button class="btn join-item">Like</button>
+                  <button class="btn join-item">Comment</button>
+                  <button class="btn join-item">Share</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<script>
+   document.addEventListener("DOMContentLoaded", function () {
+      const errView = document.getElementById('err-msg');
+      const previewContainer = document.getElementById("preview-container");
+      const fileInput = document.getElementById("file-input");
+      const desc = document.getElementById('desc');
+      const preCard = document.getElementById('preview-card');
+      var fileType;
+
+      desc.addEventListener("input", function () {
+         if (desc.value == '') {
+            preCard.classList.add('hidden');
+         }
+         else {
+            document.getElementById('pst-txt').innerHTML = desc.value;
+            preCard.classList.remove('hidden');
+         }
+      });
+      fileInput.addEventListener("change", function () {
+         if (checkFile()) {
+            fileInput.classList.remove("input-error");
+            errView.classList.add('hidden');
+            viewPreview();
+         }
+         else {
+            fileInput.value = "";
+         }
+      });
+
+      function checkFile() {
+         var file = fileInput.files[0];
+         var fileExtension = file.name.split('.').pop().toLowerCase();
+
+         // Check if the file extension is supported for image or video
+         var imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
+         var videoExtensions = ["mp4", "webm"];
+
+         if (imageExtensions.includes(fileExtension)) {
+            fileType = 'image';
+            return true;
+         } else if (videoExtensions.includes(fileExtension)) {
+            fileType = 'video';
+            return true;
+         } else {
+            errMsg("Unsupported file format");
+            return false;
+         }
+
+         // check file size 
+         if (file.size < 102400) { // 100 KB = (100 * 1024) Bytes = 102400
+            errMsg("File size too small. Please choose a file larger than 100 KB.");
+            return false;
+         }
+         if (file.size > 524288000) { // 500 MB = (100 * 1024 * 1024) Bytes = 524288000
+            errMsg("File size too large. Please choose a file smaller than 500 MB.");
+            return false;
+         }
+      }
+
+      function viewPreview() {
+         var file = fileInput.files[0];
+         var reader = new FileReader();
+         reader.onload = function (e) {
+            var previewElement;
+
+            if (fileType == 'video') {
+               previewElement = document.createElement("video");
+               previewElement.setAttribute("controls", "true");
+               var sourceElement = document.createElement("source");
+               sourceElement.setAttribute("src", e.target.result);
+               previewElement.appendChild(sourceElement);
+            } else if (fileType == 'image') {
+               previewElement = document.createElement("img");
+               previewElement.setAttribute("src", e.target.result);
+               previewElement.setAttribute("alt", "Description of the media");
+            }
+            previewContainer.innerHTML = ""; // Clear previous preview
+            previewContainer.appendChild(previewElement);
+         };
+
+         reader.readAsDataURL(file);
+      }
+
+      function errMsg(msg) {
+         errView.innerHTML = msg;
+         errView.classList.remove("hidden");
+         fileInput.classList.add("input-error");
+      }
+   });
+</script>
+
+{% endblock %}
