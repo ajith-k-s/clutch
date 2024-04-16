@@ -47,7 +47,7 @@ def checkLike(request):
    else:
       return JsonResponse({'error': 'Only GET method is allowed'}, status=404)
    
-def likeToggle(request):
+def toggleLike(request):
    if request.method == 'GET':
       pid = request.GET.get('pid', None)
       rec = Likes.objects.filter(userid = request.session['uid'], postid=pid)

@@ -44,7 +44,7 @@ urlpatterns = [
    ###         JSON        ###
    path("check-usr/", views.checkUsr, name="checkUsr"),
    path("check-like/", views.checkLike, name="checkLike"),
-   path("like-toggle/", views.likeToggle, name="likeToggle"),
+   path("toggle-like/", views.toggleLike, name="toggleLik"),
    path("toggle-follow/", views.toggleFollow, name="toggleFollow"),
    path("check-follow/", views.checkFollow, name="checkFollow"),
    ###         JSON        ###

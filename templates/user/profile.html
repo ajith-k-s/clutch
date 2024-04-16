@@ -92,9 +92,7 @@
                      {% endif %}
                   </div>
                   <div class="w-full flex flex-row justify-stretch">
-                     <button class="like-checkbox btn" name="like" value="{{ p.id }}">
-                        Like
-                     </button>
+                     <input type="checkbox" class="like-checkbox btn" name="like" value="{{ p.id }}" aria-label="Like">
                      <a href="?cmt={{ p.id }}#p{{ p.id }}" class="btn">
                         Comment
                      </a>
@@ -170,15 +168,15 @@
 
    const likeCheckboxes = document.querySelectorAll('.like-checkbox');
    likeCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener('click', function () {
-         fetch(`/like-toggle/?pid=${this.value}`)
+      checkbox.addEventListener('change', function () {
+         fetch(`/toggle-like/?pid=${this.value}`)
             .then(response => response.json())
             .then(data => {
                if (data.like) {
-                  this.classList.add("btn-secondary");
+                  this.checked = true;
                }
                else {
-                  this.classList.remove("btn-secondary")
+                  this.checked = false;
                }
             })
             .catch(error => {
@@ -207,10 +205,10 @@
             .then(response => response.json())
             .then(data => {
                if (data.like) {
-                  this.classList.add("btn-secondary");
+                  this.checked = true;
                }
                else {
-                  this.classList.remove("btn-secondary")
+                  this.checked = false;
                }
             })
             .catch(error => {
