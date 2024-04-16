@@ -38,7 +38,7 @@
             {% else %}
             <div class="w-full flex items-center justify-center gap-3 my-3 mx-3">
                <input id="follow-btn" type="checkbox" class="btn btn-sm w-2/5" aria-label="Follow" value="{{ pro.id }}">
-               <button class="btn btn-sm w-2/5">Message</button>
+               <a href="/chat/{{ pro.username }}/" class="btn btn-sm w-2/5">Message</a>
             </div>
             {% endif %}
          </div>

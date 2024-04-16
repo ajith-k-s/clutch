@@ -1,0 +1,80 @@
+{% extends 'chat/base.html' %}
+{% block title %}
+Chat{% if u %} with {{ u.username }}{% endif %}
+{% endblock %}
+{% block content %}
+
+<div class="max-w-screen h-5/6 flex flex-col items-center p-5">
+   <div class="w-4/5 h-full flex justify-center">
+      <div class="card card-compact w-full h-full">
+         <div class="card-body bg-neutral w-full h-full rounded-xl">
+
+            <h2 class="card-title">Chat{% if u %} with {{ u.username }}{% endif %}</h2>
+
+            {% if u %}
+            <div class="h-full flex flex-col justify-between bg-base-200 rounded-xl px-2">
+               <div class="flex flex-col justify-start gap-2 overflow-auto my-4">
+                  {% for m in messages %}
+                     {% if m.sender == sess.uid %}
+                     <div class="chat chat-end w-full h-fit">
+                        <div class="chat-bubble chat-bubble-primary">
+                           {{ m.content }}
+                           <time class="text-xs opacity-50">{{ m.created|time:"g:i A" }}</time>
+                        </div>
+                        <div class="chat-footer opacity-50">
+                           {{ m.created|date:"Y-m-d" }}
+                        </div>
+                     </div>
+                     {% else %}
+                     <div class="chat chat-start h-fit">
+                        <div class="chat-bubble">
+                           {{ m.content }}
+                           <time class="text-xs opacity-50">{{ m.created|time:"g:i A" }}</time>
+                        </div>
+                        <div class="chat-footer opacity-50">
+                           {{ m.created|date:"Y-m-d" }}
+                        </div>
+                     </div>
+                     {% endif %}
+                     {% endfor %}
+               </div>
+               <form action="" method="POST" class="w-full mb-2 join">
+                  {% csrf_token %}
+                  <input id="txtt" name="txt" class="w-full input input-bordered bg-base-200 join-item rounded-l-xl" placeholder="Type something">
+                  <button id="btnn" type="submit" class="btn btn-accent join-item disabled">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6M5 12l7-7 7 7"/></svg>
+                  </button>
+               </form>
+            </div>
+            {% else %}
+            <div class="w-full h-full flex justify-center items-center">
+               <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+               </svg>
+               <div class="font-bold">
+                  Pick a user to start chatting
+               </div>
+            </div>
+            {% endif %}
+
+         </div>
+      </div>
+   </div>
+</div>
+
+<script>
+   if ( window.history.replaceState ) {
+      window.history.replaceState( null, null, window.location.href );
+   }
+</script>
+<script>
+   document.getElementById('txtt').addEventListener("input", function () {
+      if (this.value == '') {
+         document.getElementById('btnn').classList.add('disabled');
+      } else {
+         document.getElementById('btnn').classList.remove('disabled');
+      }
+   });
+</script>
+{% endblock %}

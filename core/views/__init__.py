@@ -9,6 +9,7 @@ from .admin import *
 from .settings import *
 from .user import *
 from .test import *
+from .chat import *
 # from .DB import DbConnection
 # dbobj=DbConnection(host="localhost",user="root",passwd="",database="clutch",port=3306)
 

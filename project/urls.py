@@ -59,6 +59,8 @@ urlpatterns = [
    path("u/", views.reuser, name="reuser"),
    path("addpost/", views.addPost, name="addpost"),
    path("search/", views.search, name="search"),
+   path("chat/", views.chatView, name="chatView-def"),
+   path("chat/<str:username>/", views.chatView, name="chatView"),
    ###      User page      ###
    ###########################
 
