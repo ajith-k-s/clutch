@@ -60,6 +60,7 @@ class Post(models.Model):
    userid = models.IntegerField(default = 0, blank = False)
    description = models.TextField()
    file = models.FileField(upload_to=generate_filename)
+   filetype = models.CharField(max_length=10)
    created = models.DateTimeField(auto_now_add=True)
    class Meta:
       db_table = "post"
@@ -71,8 +72,9 @@ class Likes(models.Model):
       db_table = "likes"
 
 class Comments(models.Model):
-   userid = models.IntegerField(default = 0, blank = False)
+   userid = models.ForeignKey(Profile, on_delete=models.CASCADE)
    postid = models.IntegerField(default = 0, blank = False)
+   content = models.TextField(blank=False)
    created = models.DateTimeField(auto_now_add=True)
    class Meta:
       db_table = "comments"

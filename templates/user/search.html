@@ -1,0 +1,53 @@
+{% extends 'user/base.html' %}
+{% block title %}Search in Clutch{% endblock %}
+{% block content %}
+
+<div class="min-h-screen min-w-11/12 max-w-full flex justify-center m-5 gap-5">
+
+   <div class="card card-compact bg-neutral lg:w-2/3 md:w-full h-fit">
+      <div class="card-body">
+         <h2 class="card-title">Search</h2>
+
+         <form action="/search/" method="get">
+            <!-- <input type="text" name="s" placeholder="Search" class="input input-bordered " /> -->
+            <div class="join">
+               <div>
+                  <div>
+                     <input name="s" class="input input-bordered join-item" placeholder="Search" {% if key %}
+                        value="{{ key }}" {% endif %} required />
+                  </div>
+               </div>
+               <select name="filter" class="select select-bordered join-item">
+                  <option value="u" selected>User</option>
+                  <option value="p" disabled>Post</option>
+               </select>
+               <div class="indicator">
+                  <button class="btn join-item">Search</button>
+               </div>
+            </div>
+         </form>
+
+         {% if records %}
+         <h2 class="card-title mt-5 mb-3">Results of "{{ key }}" in Clutch</h2>
+         {% if records == 1 %}
+         <div class="w-full h-fit flex flex-row justify-center">
+            <h3>No Records Found</h3>
+         </div>
+         {% else %}
+         <div class="w-full h-fit flex flex-row justify-center">
+            {% for row in records %}
+            <a href="/u/{{ row.username }}/" class="btn btn-primary btn-wide h-fit">
+               <div class="card-body flex flex-row justify-center">
+                  <img class="w-8 rounded-full" src="{{ row.image.url }}">
+                  <h2 class="text-xl">@{{ row.username }}</h1>
+               </div>
+               </a>
+            {% endfor %}
+         </div>
+         {% endif %}
+         {% endif %}
+      </div>
+   </div>
+</div>
+
+{% endblock %}

@@ -13,15 +13,82 @@ def reuser(request):
 @require_login
 def user(request, username):
    pro = Profile.objects.get(username=username)
+   pst = Post.objects.filter(userid=pro.id)
    if username == request.session['username']:
       isusr = True
    else:
       isusr = False
-   return render(request, 'user/profile.html', {'pro': pro, 'res': 2, 'isusr': isusr, 'sess': request.session})
+   if pst.count() == 0:
+      res = 2
+   else:
+      res = 0
+   cmt = 0
+   cmts = 0
+   if 'cmt' in request.GET:
+      cmt = int(request.GET['cmt'])
+      rec = Comments.objects.filter(postid=cmt).select_related('userid').values('id', 'userid__name', 'userid__username', 'userid__image', 'content', 'created')
+      if rec.count() > 0:
+         rec = Comments.objects.filter(postid=cmt)
+         cmts = []
+         for comment in rec:
+            profile = Profile.objects.get(id=comment.userid_id)
+            comment_dict = {
+               'id': comment.id,
+               'userid': comment.userid_id,
+               'username': profile.username,  # Add username from Profile
+               'image': profile.image.url,    # Add image URL from Profile
+               'content': comment.content,
+               'created': comment.created
+            }
+            cmts.append(comment_dict)
+            
+   if request.method == 'POST' and 'txt' in request.POST and request.POST['txt'] != '':
+      pid = int(request.POST['pid'])
+      comment = Comments.objects.create(
+         userid=pro,
+         postid=pid,
+         content=request.POST['txt']
+      )
+      try:
+         comment.save()
+         print("comment added success")
+      except:
+         print("comment failed")
+   return render(request, 'user/profile.html', {'pro': pro, 'res': res, 'pst': pst, 'isusr': isusr, 'sess': request.session, 'cmt': cmt, 'cmts': cmts})
 
 @require_login
 def addPost(request):
    if request.method == 'POST':
-      pass
+      pst = Post.objects.create(
+         userid = request.session['uid'],
+         description = request.POST['desc'],
+      )
+      if 'filee' in request.FILES:
+         ext = request.FILES['filee'].name.split('.')[-1]
+         imgExt = ["jpg", "jpeg", "png", "gif", "bmp", "webp"]
+         vidExt = ["mp4", "webm"]
+         if ext in imgExt:
+            pst.file = request.FILES['filee']
+            pst.filetype = 'img'
+         elif ext in vidExt:
+            pst.file = request.FILES['filee']
+            pst.filetype = 'vid'
+      try:
+         pst.save()
+         msg = "Success"
+      except:
+         msg="Failed"
+         return render(request, 'user/addpost.html', {'sess': request.session, "msg": msg}) 
+      return redirect(reuser)
    else:
       return render(request, 'user/addpost.html', {'sess': request.session})
+
+@require_login
+def search(request):
+   if request.method == 'GET' and 's' in request.GET and request.GET['s'] != '':
+      records = Profile.objects.filter(name__icontains=request.GET['s'])
+      if records.count() == 0:
+         records = 1
+      return render(request, 'user/search.html', {'key': request.GET['s'], 'records': records,'sess': request.session})
+   else:
+      return render(request, 'user/search.html', {'sess': request.session})

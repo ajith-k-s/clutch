@@ -34,12 +34,23 @@ urlpatterns = [
    path("", views.index, name="index"),
    path("signin/", views.signin, name="signin"),
    path("signup/", views.signup, name="signup"),
-   path("check-usr/", views.checkUsr, name="checkUsr"),
    path("signout/", views.signout, name="signout"),
    ###         Base        ###
    ###########################
 
 
+
+   ###########################
+   ###         JSON        ###
+   path("check-usr/", views.checkUsr, name="checkUsr"),
+   path("check-like/", views.checkLike, name="checkLike"),
+   path("like-toggle/", views.likeToggle, name="likeToggle"),
+   path("toggle-follow/", views.toggleFollow, name="toggleFollow"),
+   path("check-follow/", views.checkFollow, name="checkFollow"),
+   ###         JSON        ###
+   ###########################
+   
+   
 
    ###########################    
    ###      User page      ###
@@ -47,6 +58,7 @@ urlpatterns = [
    path("u/<str:username>/", views.user, name="user"),
    path("u/", views.reuser, name="reuser"),
    path("addpost/", views.addPost, name="addpost"),
+   path("search/", views.search, name="search"),
    ###      User page      ###
    ###########################
 
@@ -56,6 +68,7 @@ urlpatterns = [
    ###       Settings      ###
    path("settings/", views.settings, name="settings"),
    path("settings/account/", views.account, name="account"),
+   path("settings/sign-in/", views.changePassword, name="changePassword"),
    ###       Settings      ###
    ###########################
 

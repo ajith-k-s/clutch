@@ -19,7 +19,7 @@
             </div>
             <div class="h-20 w-1/4 card bg-base-200 rounded-box">
                <a href="/followers/" class="h-full w-full flex flex-col items-center justify-center">
-                  <span class="text-2xl font-bold">{{ pro.followers }}</span>
+                  <span id="follow" class="text-2xl font-bold">{{ pro.followers }}</span>
                   <span>Followers</span>
                </a>
             </div>
@@ -32,8 +32,13 @@
          </div>
          <div>
             {% if isusr == True %}
-            <div class="w-full flex items-center justify-center my-3">
+            <div class="w-full flex items-center justify-center my-3 mx-3">
                <a href="/settings/account/" class="w-5/6 btn btn-sm btn-wide btn-primary">Edit Profile</a>
+            </div>
+            {% else %}
+            <div class="w-full flex items-center justify-center gap-3 my-3 mx-3">
+               <input id="follow-btn" type="checkbox" class="btn btn-sm w-2/5" aria-label="Follow" value="{{ pro.id }}">
+               <button class="btn btn-sm w-2/5">Message</button>
             </div>
             {% endif %}
          </div>
@@ -48,38 +53,199 @@
       </div>
    </div>
 
-   <div class="card card-compact bg-base-300 lg:w-3/5 md:w-full h-fit">
-      <div class="card-body">
+   <div class="card card-compact bg-base-300 lg:w-3/5 w-full h-fit">
+      <div class="w-full h-fit card-body">
          <h2 class="card-title">Posts by @{{ pro.username }}</h2>
          {% if res == 1 %}
-         <span class="flex justify-center my-10"><h2>This Account is Private</h2></span>
+         <span class="flex justify-center my-10">
+            <h2>This Account is Private</h2>
+         </span>
          {% elif res == 2 %}
-         <span class="flex justify-center my-10"><h2>No Posts Yet</h2></span>
+         <span class="flex justify-center my-10">
+            <h2>No Posts Yet</h2>
+         </span>
          {% else %}
-         <div class="flex gap-4">
-         {% for p in posts %}
-         <div class="w-full card bg-neutral h-fit">
-            <div class="card-body">
+         <div class="flex flex-col items-stretch gap-4">
+            {% for p in pst %}
+            <div id="p{{ p.id }}" class="lg:w-3/4 lg:min-w-1/2 w-full card card-compact bg-neutral h-fit mt-5 mx-auto">
+               <div class="card-body">
 
-               <div class="card-title mb-3 flex justify-start align-center">
-                  <div class="Avatar">
-                     <div class="w-10 rounded-full">
-                        <img src="{{ p.user_image }}">
+                  <div class="card-title mb-3 flex flex-row justify-start align-center">
+                     <div class="Avatar">
+                        <div class="w-10 rounded-full">
+                           <img src="{{ pro.image.url }}">
+                        </div>
+                        <h2>@{{ pro.username }}</h3>
                      </div>
-                     <h3>{{ p.user_name }}</h3>
                   </div>
-               </div>
 
-               <div class="w-full h-fit">
-                  <p>{{ p.description }}</p>
+                  <div class="w-full h-fit">
+                     <p>{{ p.description }}</p>
+                  </div>
+                  <div class="min-w-full p-3">
+                     {% if p.filetype == 'img' %}
+                     <img src="{{ p.file.url }}">
+                     {% elif p.filetype == 'vid' %}
+                     <video controls="true">
+                        <source src="{{ p.file.url}}">
+                     </video>
+                     {% endif %}
+                  </div>
+                  <div class="w-full flex flex-row justify-stretch">
+                     <button class="like-checkbox btn" name="like" value="{{ p.id }}">
+                        Like
+                     </button>
+                     <a href="?cmt={{ p.id }}#p{{ p.id }}" class="btn">
+                        Comment
+                     </a>
+                     <button class="btn">
+                        Share
+                     </button>
+                  </div>
+                  {% if cmt == p.id %}
+                  <div class="w-full max-h-96 h-fit bg-base-100 flex flex-col gap-2 px-4 py-2 mt-2 rounded-xl">
+                     {% if cmts %}
+                     {% for cm in cmts %}
+                     <div class="card w-4/5 overflow-auto bg-base-100">
+                        <div class="card-body">
+
+                           <div class="card-title mb-3 flex flex-row justify-start align-center">
+                              <div class="Avatar">
+                                 <div class="w-10 rounded-full">
+                                    <img src="{{ cm.image }}">
+                                 </div>
+                                 <h2>@{{ cm.username }}</h3>
+                              </div>
+                           </div>
+
+                           <p>{{ cm.content }}</p>
+
+                        </div>
+                     </div>
+                     {% endfor %}
+                  </div>
+                  {% else %}
+                  <div class="flex flex-row justify-center m-4">
+                  No comments yet
+                  </div>
+                  {% endif %}
+                  <form action="" method="POST" class="w-full mb-2 join">
+                     {% csrf_token %}
+                     <input id="txtt" name="txt" class="w-full input input-bordered bg-base-200 join-item" placeholder="Type something">
+                     <input name="pid" value="{{ p.id }}" type="hidden">
+                     <button id="btnn" type="submit" class="btn btn-accent join-item disabled">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                     </button>
+                  </form>
                </div>
+               {% endif %}
             </div>
          </div>
          {% endfor %}
-         </div>
-         {% endif %}
       </div>
+      {% endif %}
    </div>
 </div>
+</div>
 
-   {% endblock %}
+<script>
+   const followCount = document.getElementById('follow');
+   document.getElementById('follow-btn').addEventListener('change', function() {
+      fetch(`/toggle-follow/?uid=${this.value}`)
+            .then(response => response.json())
+            .then(data => {
+               if (data.follow) {
+                  this.checked = true;
+                  followCount.innerHTML = data.count;
+               }
+               else {
+                  this.checked = false;
+                  followCount.innerHTML = data.count;
+               }
+            })
+            .catch(error => {
+               console.error('Error:', error);
+            });
+   });
+
+   const likeCheckboxes = document.querySelectorAll('.like-checkbox');
+   likeCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('click', function () {
+         fetch(`/like-toggle/?pid=${this.value}`)
+            .then(response => response.json())
+            .then(data => {
+               if (data.like) {
+                  this.classList.add("btn-secondary");
+               }
+               else {
+                  this.classList.remove("btn-secondary")
+               }
+            })
+            .catch(error => {
+               console.error('Error:', error);
+            });
+      });
+   });
+   document.addEventListener("DOMContentLoaded", function () {
+      
+      fetch(`/check-follow/?uid=${'{{ pro.id }}'}`)
+            .then(response => response.json())
+            .then(data => {
+               if (data.follow) {
+                  document.getElementById('follow-btn').checked = true;
+               }
+               else {
+                  document.getElementById('follow-btn').checked = false;
+               }
+            })
+            .catch(error => {
+               console.error('Error:', error);
+            });
+
+      likeCheckboxes.forEach(checkbox => {
+         fetch(`/check-like/?pid=${checkbox.value}`)
+            .then(response => response.json())
+            .then(data => {
+               if (data.like) {
+                  this.classList.add("btn-secondary");
+               }
+               else {
+                  this.classList.remove("btn-secondary")
+               }
+            })
+            .catch(error => {
+               console.error('Error:', error);
+            });
+      });
+   });
+   document.getElementById('txtt').addEventListener("input", function () {
+      if (this.value == '') {
+         document.getElementById('btnn').classList.add('disabled');
+      } else {
+         document.getElementById('btnn').classList.remove('disabled');
+      }
+   });
+</script>
+
+{% endblock %}
+
+<!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+</svg> -->
+
+<!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+   <path
+      d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+   </path>
+</svg> -->
+
+<!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+   <circle cx="18" cy="5" r="3"></circle>
+   <circle cx="6" cy="12" r="3"></circle>
+   <circle cx="18" cy="19" r="3"></circle>
+   <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+   <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+</svg> -->

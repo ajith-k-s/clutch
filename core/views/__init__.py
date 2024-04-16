@@ -36,6 +36,70 @@ def checkUsr(request):        # check whether username is available of not
    else:
       return JsonResponse({'error': 'Only GET method is allowed'}, status=405)
 
+def checkLike(request):
+   if request.method == 'GET':
+      pid = request.GET.get('pid', None)
+      rec = Likes.objects.filter(userid = request.session['uid'], postid=pid)
+      if rec.count() == 1:
+         return JsonResponse({'like': True})
+      else:
+         return JsonResponse({'like': False})
+   else:
+      return JsonResponse({'error': 'Only GET method is allowed'}, status=404)
+   
+def likeToggle(request):
+   if request.method == 'GET':
+      pid = request.GET.get('pid', None)
+      rec = Likes.objects.filter(userid = request.session['uid'], postid=pid)
+      if rec.count() == 1:
+         try:
+            Likes.objects.get(userid = request.session['uid'], postid=pid).delete()
+            return JsonResponse({'like': False})
+         except:
+            return JsonResponse({'like': True})
+      else:
+         try:
+            Likes.objects.create(userid = request.session['uid'], postid=pid).save()
+            return JsonResponse({'like': True})
+         except:
+            return JsonResponse({'like': False})
+   else:
+      return JsonResponse({'error': 'Only GET method is allowed'}, status=404)
+   
+def toggleFollow(request):
+   if request.method == 'GET':
+      uid = request.GET.get('uid', None)
+      rec = Follow.objects.filter(follower = request.session['uid'], followed=uid)
+      usr = Profile.objects.get(id=uid)
+      if rec.count() == 1:
+         try:
+            Follow.objects.get(follower = request.session['uid'], followed=uid).delete()
+            usr.followers -= 1
+            usr.save()
+            return JsonResponse({'follow': False, 'count': usr.followers})
+         except:
+            return JsonResponse({'follow': True, 'count': usr.followers})
+      else:
+         try:
+            Follow.objects.create(follower = request.session['uid'], followed=uid).save()
+            usr.followers += 1
+            usr.save()
+            return JsonResponse({'follow': True, 'count': usr.followers})
+         except:
+            return JsonResponse({'follow': False, 'count': usr.followers})
+   else:
+      return JsonResponse({'error': 'Only GET method is allowed'}, status=404)
+
+def checkFollow(request):
+   if request.method == 'GET':
+      uid = request.GET.get('uid', None)
+      rec = Follow.objects.filter(follower = request.session['uid'], followed=uid)
+      if rec.count() == 1:
+         return JsonResponse({'follow': True})
+      else:
+         return JsonResponse({'follow': False})
+   else:
+      return JsonResponse({'error': 'Only GET method is allowed'}, status=404)
 
 
 

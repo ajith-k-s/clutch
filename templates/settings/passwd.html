@@ -1,0 +1,43 @@
+{% extends 'settings/base.html' %}
+{% block title %}Sign-in Settings{% endblock %}
+{% block content %}
+
+<div class="max-w-[100vw] flex flex-col items-center p-5">
+   <div class="w-3/4 flex justify-center">
+      <div class="card card-compact w-full">
+         <div class="card-body bg-neutral">
+
+            <h2 class="card-title">Sign-in Settings</h2>
+
+            <div class="w-full h-fit">
+               <form action="/settings/sign-in/" method="POST" class="w-2/3 flex flex-col items-center mx-auto mt-4">
+                  {% csrf_token %}
+                  <div class="w-full form-control flex flex-row items-center mb-4 mx-2">
+                     <label for="passwd" class="w-2/5">Current Password</label>
+                     <input id="passwd" name="passwd" type="password" class="w-3/5 input input-bordered" />
+                  </div>
+                  <div class="w-full form-control flex flex-row items-center mb-4 mx-2">
+                     <label for="pass" class="w-2/5">New Password</label>
+                     <input id="pass" name="pass" type="password" class="w-3/5 input input-bordered" />
+                  </div>
+                  <div class="w-full form-control flex flex-row items-center mb-4 mx-2">
+                     <label for="cpass" class="w-2/5">Confirm Password</label>
+                     <input id="cpass" name="cpass" type="password" class="w-3/5 input input-bordered" />
+                  </div>
+                  <div class="w-full flex flex-row justify-center my-2 gap-3">
+                     <div>
+                        <button id="savebtn" class="btn btn-primary btn-sm" name="action" value='save'>Save</button>
+                     </div>
+                     <div>
+                        <input type="reset" value="Clear" class="btn btn-sm">
+                     </div>
+                  </div>
+               </form>
+            </div>
+
+         </div>
+      </div>
+   </div>
+</div>
+
+{% endblock %}

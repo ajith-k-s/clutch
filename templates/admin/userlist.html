@@ -28,7 +28,7 @@
                      {% for usr in usrs %}
                      <tr class="{% if usr.username != 'admin' %} hover {% endif %}">
                         <td>{{ usr.id }}</td>
-                        <td><a class="link link-primary" href="/users/{{ usr.username }}">{{ usr.username }}</a></td>
+                        <td><a class="link link-primary" href="/u/{{ usr.username }}/">{{ usr.username }}</a></td>
                         <td>{{ usr.name }}</td>
                         <td>{{ usr.email }}</td>
                         <td>{{ usr.mobile }}</td>
@@ -46,7 +46,7 @@
                         <td>{{ usr.status }}</td>
                         <td>
                            <div class="join">
-                              <a href="{% if usr.username != 'admin' %} /editusr/{{ usr.id }} {% endif %}"
+                              <!-- <a href="{% if usr.username != 'admin' %} /editusr/{{ usr.id }} {% endif %}"
                                     class="btn btn-sm btn-square btn-outline btn-warning join-item"
                                     {% if usr.username == 'admin' %} disabled {% endif %}
                                     title="Edit @{{usr.username}}">
@@ -55,7 +55,7 @@
                                        stroke-linejoin="round">
                                        <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
                                     </svg>
-                              </a>
+                              </a> -->
                               <a href="{% if usr.username != 'admin' %} /blockusr/{{ usr.id }} {% endif %}"
                                     class="btn btn-sm btn-square btn-outline btn-error join-item"
                                     {% if usr.username == 'admin' %} disabled {% endif %}
