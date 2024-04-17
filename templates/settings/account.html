@@ -14,9 +14,24 @@
                   <div class="w-full h-fit rounded-full relative group">
                      <img class="w-full h-fit" src="{{ usr.image.url }}">
                      <div class="absolute w-full h-1/4 left-0 bottom-0 right-0 opacity-0 group-hover:opacity-100">
-                        <a class="w-full h-full btn btn-primary rounded-b-full text-primary-content">Change</a>
+                        <button class="w-full h-full btn btn-primary rounded-b-full text-primary-content"
+                           onclick="modal.showModal()">Change</button>
                      </div>
                   </div>
+                  <dialog id="modal" class="modal modal-bottom sm:modal-middle">
+                     <div class="modal-box">
+                        <form method="dialog">
+                           <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                        </form>
+                        <h3 class="font-bold text-lg">Change Profile Picture</h3>
+                        <p class="py-4">Upload new image to set as profile picture</p>
+                        <form action="" method="POST" class="flex flex-col items-center gap-2" enctype="multipart/form-data">
+                           {% csrf_token %}
+                           <input type="file" name="usrpic" class="file-input file-input-bordered">
+                           <button type="submit" class="btn btn-sm btn-primary mt-2" name="action" value="image">Save</button>
+                        </form>
+                     </div>
+                  </dialog>
                </div>
                <form action="/settings/account/" method="POST" class="w-2/3 flex flex-col items-center mt-4">
                   {% csrf_token %}
@@ -33,11 +48,13 @@
                   </div>
                   <div class="w-full flex items-center mb-4 mx-2">
                      <label for="name" class="w-1/6">Name</label>
-                     <input id="name" name="name" type="text" class="w-4/5 input input-bordered" value="{{ usr.name }}" />
+                     <input id="name" name="name" type="text" class="w-4/5 input input-bordered"
+                        value="{{ usr.name }}" />
                   </div>
                   <div class="w-full flex items-center mb-4 mx-2">
                      <label for="bio" class="w-1/6">Bio</label>
-                     <textarea id="bio" name="bio" class="w-4/5 textarea textarea-bordered resize">{{ usr.bio }}</textarea>
+                     <textarea id="bio" name="bio"
+                        class="w-4/5 textarea textarea-bordered resize">{{ usr.bio }}</textarea>
                   </div>
                   <div class="w-full flex flex-row justify-center gap-3">
                      <div>
@@ -56,7 +73,7 @@
 </div>
 
 <script>
-   function clearBox(){
+   function clearBox() {
       document.getElementById('username').value = '{{ usr.username }}';
       document.getElementById('name').value = '{{ usr.name }}';
       document.getElementById('bio').value = '{{ usr.bio }}';

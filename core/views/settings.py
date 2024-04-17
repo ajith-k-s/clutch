@@ -1,6 +1,17 @@
+import os
+from django.conf import settings
 from django.shortcuts import render, redirect
 from .decorators import require_login
 from ..models import *
+
+def delUsrImage(profile):
+   if profile.image.name != 'blank_user.png':
+      # Get the path of the previous image
+      previous_image_path = os.path.join(settings.MEDIA_ROOT, profile.image.name)
+      # Check if the file exists and delete it
+      if os.path.exists(previous_image_path):
+         os.remove(previous_image_path)
+
 
 @require_login
 def settings(request):
@@ -27,6 +38,17 @@ def account(request):
          return render(request, 'settings/account.html', {'usr': usr, 'err': err, 'sess': request.session})
       elif request.POST['action'] == 'cancel':
          return render(request, 'settings/account.html', {'usr': usr, 'sess': request.session})
+      elif request.POST['action'] == 'image':
+         usr = Profile.objects.get(id=request.session['uid'])
+         delUsrImage(usr)
+         usr.image = request.FILES['usrpic']
+         try:
+            usr.save()
+            request.session['profile_image'] = usr.image.url
+            err = '0'
+         except:
+            err = '1'
+         return render(request, 'settings/account.html', {'usr': usr, 'err': err, 'sess': request.session})
    else:
       return render(request, 'settings/account.html', {'usr': usr, 'sess': request.session})
 
