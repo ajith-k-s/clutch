@@ -146,6 +146,8 @@
 </div>
 </div>
 
+
+{% if not isusr %}
 <script>
    const followCount = document.getElementById('follow');
    document.getElementById('follow-btn').addEventListener('change', function() {
@@ -165,27 +167,7 @@
                console.error('Error:', error);
             });
    });
-
-   const likeCheckboxes = document.querySelectorAll('.like-checkbox');
-   likeCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener('change', function () {
-         fetch(`/toggle-like/?pid=${this.value}`)
-            .then(response => response.json())
-            .then(data => {
-               if (data.like) {
-                  this.checked = true;
-               }
-               else {
-                  this.checked = false;
-               }
-            })
-            .catch(error => {
-               console.error('Error:', error);
-            });
-      });
-   });
    document.addEventListener("DOMContentLoaded", function () {
-      
       fetch(`/check-follow/?uid=${'{{ pro.id }}'}`)
             .then(response => response.json())
             .then(data => {
@@ -199,16 +181,34 @@
             .catch(error => {
                console.error('Error:', error);
             });
+   });
+</script>
+{% endif %}
 
-      likeCheckboxes.forEach(checkbox => {
-         fetch(`/check-like/?pid=${checkbox.value}`)
+{% if cmt %}
+<script>
+   document.getElementById('txtt').addEventListener("input", function () {
+      if (this.value == '') {
+         document.getElementById('btnn').classList.add('disabled');
+      } else {
+         document.getElementById('btnn').classList.remove('disabled');
+      }
+   });
+</script>
+{% endif %}
+
+<script>
+   const likeCheckboxes = document.querySelectorAll('.like-checkbox');
+   likeCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', function () {
+         fetch(`/toggle-like/?pid=${checkbox.value}`)
             .then(response => response.json())
             .then(data => {
                if (data.like) {
-                  this.checked = true;
+                  checkbox.checked = true;
                }
                else {
-                  this.checked = false;
+                  checkbox.checked = false;
                }
             })
             .catch(error => {
@@ -216,12 +216,24 @@
             });
       });
    });
-   document.getElementById('txtt').addEventListener("input", function () {
-      if (this.value == '') {
-         document.getElementById('btnn').classList.add('disabled');
-      } else {
-         document.getElementById('btnn').classList.remove('disabled');
-      }
+   document.addEventListener("DOMContentLoaded", function () {
+      likeCheckboxes.forEach(checkbox => {
+         fetch(`/check-like/?pid=${checkbox.value}`)
+            .then(response => response.json())
+            .then(data => {
+               console.log(data.like);
+               console.log(checkbox.checked);
+               if (data.like) {
+                  checkbox.checked = true;
+               }
+               else {
+                  checkbox.checked = false;
+               }
+            })
+            .catch(error => {
+               console.error('Error:', error);
+            });
+      });
    });
 </script>
 
