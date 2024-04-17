@@ -61,6 +61,8 @@ urlpatterns = [
    path("search/", views.search, name="search"),
    path("chat/", views.chatView, name="chatView-def"),
    path("chat/<str:username>/", views.chatView, name="chatView"),
+   path("followers/", views.followers, name="followers"),
+   path("followings/", views.followings, name="followings"),
    ###      User page      ###
    ###########################
 

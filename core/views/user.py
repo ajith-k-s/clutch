@@ -92,3 +92,37 @@ def search(request):
       return render(request, 'user/search.html', {'key': request.GET['s'], 'records': records,'sess': request.session})
    else:
       return render(request, 'user/search.html', {'sess': request.session})
+
+@require_login
+def followers(request):
+   rel = Follow.objects.filter(followed=request.session['uid']).values_list('follower', flat=True)
+   records = []
+   if rel.count() == 0:
+      records = 1
+   else:
+      for r in rel:
+         profile = Profile.objects.get(id=r)
+         r_dict = {
+            'id': profile.id,
+            'username': profile.username,
+            'image': profile.image.url,
+         }
+         records.append(r_dict)
+   return render(request, 'user/followers.html', {'records': records,'sess': request.session})
+
+@require_login
+def followings(request):
+   rel = Follow.objects.filter(follower=request.session['uid']).values_list('followed', flat=True)
+   records = []
+   if rel.count() == 0:
+      records = 1
+   else:
+      for r in rel:
+         profile = Profile.objects.get(id=r)
+         r_dict = {
+            'id': profile.id,
+            'username': profile.username,
+            'image': profile.image.url,
+         }
+         records.append(r_dict)
+   return render(request, 'user/followings.html', {'records': records,'sess': request.session})

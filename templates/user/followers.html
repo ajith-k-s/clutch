@@ -1,0 +1,33 @@
+{% extends 'user/base.html' %}
+{% block title %}Followers of {{ sess.username }}{% endblock %}
+{% block content %}
+
+<div class="min-h-screen min-w-11/12 max-w-full flex justify-center m-5 gap-5">
+
+   <div class="card card-compact bg-neutral lg:w-2/3 md:w-full h-fit">
+      <div class="card-body">
+         <h2 class="card-title">Followers of {{ sess.username }}</h2>
+
+         {% if records %}
+         {% if records == 1 %}
+         <div class="w-full h-fit flex flex-row justify-center">
+            <h3>No followers yet</h3>
+         </div>
+         {% else %}
+         <div class="w-full h-fit flex flex-row justify-center">
+            {% for row in records %}
+            <a href="/u/{{ row.username }}/" class="btn btn-primary btn-wide h-fit">
+               <div class="card-body flex flex-row justify-center">
+                  <img class="w-8 rounded-full" src="{{ row.image.url }}">
+                  <h2 class="text-xl">@{{ row.username }}</h1>
+               </div>
+            </a>
+            {% endfor %}
+         </div>
+         {% endif %}
+         {% endif %}
+      </div>
+   </div>
+</div>
+
+{% endblock %}
