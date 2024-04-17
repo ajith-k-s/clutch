@@ -23,9 +23,30 @@
                <a href="/" class="btn btn-ghost text-xl">Clutch</a>
             </div>
             <div class="flex-none gap-2">
-               <div class="form-control">
-                  <input type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto" />
-               </div>
+               <a href="/addpost/" class="btn btn-circle btn-neutral btn-outline btn-sm p-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                     <line x1="12" y1="5" x2="12" y2="19"></line>
+                     <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+               </a>
+               <form action="/search/" method="get">
+                  <!-- <input type="text" name="s" placeholder="Search" class="input input-bordered " /> -->
+                  <div class="join">
+                     <div>
+                        <div>
+                           <input name="s" class="input input-bordered input-sm join-item" placeholder="Search" required/>
+                        </div>
+                     </div>
+                     <select name="filter" class="select select-bordered select-sm join-item">
+                        <option value="u" selected>User</option>
+                        <option value="p" disabled>Post</option>
+                     </select>
+                     <div class="indicator">
+                        <button class="btn btn-sm join-item">Search</button>
+                     </div>
+                  </div>
+               </form>
                <div class="dropdown dropdown-end">
                   <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
                      <div class="w-10 rounded-full">
